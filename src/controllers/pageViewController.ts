@@ -9,7 +9,11 @@ export const trackPageView = async (req: Request<{}, StandardResponse, PageViewR
   try {
     const { article } = req.body;
 
-    const articleCheck = await Article.findById(article).select('_id title status').lean();
+    const articleCheck = await Article.findOne({
+      _id: new Types.ObjectId(article),
+      deleted: { $ne: true },
+      status: 'published'
+    });
 
     if (!articleCheck) {
       res.status(404).json({ error: 'Article not found' });

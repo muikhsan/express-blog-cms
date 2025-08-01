@@ -297,7 +297,7 @@ export const deleteArticle = async (req: AuthRequest, res: Response<StandardResp
       return;
     }
 
-    await (article as any).delete();
+    await Article.findByIdAndUpdate(id, { deleted: true, status: 'deleted' }, { new: true });
     res.json({ message: 'Article deleted successfully' });
   } catch (error) {
     console.error('Delete article error:', error);
